@@ -1,0 +1,25 @@
+:root {
+  --bg-clr: #fffbeb;
+  --bg-clr-2: #ecfeff;
+  --text-clr: #082f49;
+  --text-clr-2: #3b0764;
+}
+body {
+  font-family: "Open Sans", sans-serif;
+}
+#root {
+  min-height: 100vh;
+  background-color: var(--bg-clr);
+  color: var(--text-clr);
+  background: linear-gradient(130deg, var(--bg-clr-2), var(--bg-clr));
+}
+.gradient-dark {
+  background: linear-gradient(130deg, var(--text-clr), var(--text-clr-2));
+}
+.gradient-light {
+  background: linear-gradient(130deg, var(--bg-clr-2), var(--bg-clr));
+}
+::selection {
+  color: var(--bg-clr-2);
+  background-color: var(--text-clr);
+}
