@@ -1,10 +1,12 @@
-import "./App.css";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Auth from "./pages/Auth";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Footer } from "./components/Footer";
+
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (

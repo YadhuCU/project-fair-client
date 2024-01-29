@@ -1,17 +1,58 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+
+import { registerAPI } from "../services/allAPIs";
+import { useNavigate } from "react-router-dom";
 
 Auth.propTypes = {
   insideRegister: PropTypes.bool,
 };
 
 function Auth({ insideRegister }) {
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  // register
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    const { username, email, password } = userData;
+
+    if (username && email && password) {
+      try {
+        const result = await registerAPI(userData);
+
+        // register new user
+        if (result.status === 200) {
+          setUserData({ username: "", email: "", password: "" });
+          toast.success("Account Registered successfully");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } else {
+          toast.warning(result.response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast.info("Please fill the form completely!!");
+    }
+  };
+
   return (
     <div
       style={{ width: "100%", height: "100vh" }}
       className="d-flex  justify-content-center align-items-center"
     >
+      <ToastContainer autoClose={2000} />
       <div className="w-75 container">
         <Link
           to={"/home"}
@@ -56,6 +97,10 @@ function Auth({ insideRegister }) {
                         style={{ border: "none", outline: "none" }}
                         type="text"
                         placeholder="Enter Username"
+                        onChange={(e) =>
+                          setUserData({ ...userData, username: e.target.value })
+                        }
+                        value={userData.username}
                       />
                     </Form.Group>
                   )}
@@ -64,6 +109,10 @@ function Auth({ insideRegister }) {
                       style={{ border: "none", outline: "none" }}
                       type="email"
                       placeholder="Enter email"
+                      onChange={(e) =>
+                        setUserData({ ...userData, email: e.target.value })
+                      }
+                      value={userData.email}
                     />
                   </Form.Group>
 
@@ -72,11 +121,21 @@ function Auth({ insideRegister }) {
                       style={{ border: "none", outline: "none" }}
                       type="password"
                       placeholder="Password"
+                      onChange={(e) =>
+                        setUserData({ ...userData, password: e.target.value })
+                      }
+                      value={userData.password}
                     />
                   </Form.Group>
                   {insideRegister ? (
                     <div>
-                      <button className="btn gradient-light">Register</button>
+                      <button
+                        onClick={handleRegister}
+                        type="submit"
+                        className="btn gradient-light"
+                      >
+                        Register
+                      </button>
                       <p>
                         Already have an account? Click here to{" "}
                         <Link
@@ -89,7 +148,9 @@ function Auth({ insideRegister }) {
                     </div>
                   ) : (
                     <div>
-                      <button className="btn gradient-light">Login</button>
+                      <button type="submit" className="btn gradient-light">
+                        Login
+                      </button>
                       <p>
                         New User? Click here to{" "}
                         <Link
