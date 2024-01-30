@@ -2,12 +2,27 @@ import { Link } from "react-router-dom";
 import landingImage from "../assets/project-img.png";
 import { ProjectCard } from "../components/ProjectCard";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 function Home() {
   const navigate = useNavigate();
+  const [isLogedIn, setIsLogedIn] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setIsLogedIn(true);
+    } else {
+      setIsLogedIn(false);
+    }
+  }, []);
 
   const handleProjectPage = () => {
-    navigate("/projects");
+    if (sessionStorage.getItem("token")) {
+      navigate("/projects");
+    } else {
+      toast.warning("Please Log in to explore our projects.");
+    }
   };
 
   return (
@@ -47,18 +62,33 @@ function Home() {
               available in our webiste... What are you waiting for..!!!
             </p>
             <div className="d-flex justify-content-center">
-              <Link
-                className="btn gradient-dark"
-                style={{
-                  fontSize: "1.2rem",
-                  // backgroundColor: "var(--text-clr)",
-                  color: "var(--bg-clr)",
-                  fontWeight: "700",
-                }}
-                to={"/login"}
-              >
-                Start to Explore
-              </Link>
+              {isLogedIn ? (
+                <Link
+                  className="btn gradient-dark"
+                  style={{
+                    fontSize: "1.2rem",
+                    // backgroundColor: "var(--text-clr)",
+                    color: "var(--bg-clr)",
+                    fontWeight: "700",
+                  }}
+                  to={"/dashboard"}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  className="btn gradient-dark"
+                  style={{
+                    fontSize: "1.2rem",
+                    // backgroundColor: "var(--text-clr)",
+                    color: "var(--bg-clr)",
+                    fontWeight: "700",
+                  }}
+                  to={"/login"}
+                >
+                  Start to Explore
+                </Link>
+              )}
             </div>
           </div>
           <div className="col-lg-6 align-items-center">
@@ -90,6 +120,7 @@ function Home() {
           </button>
         </div>
       </div>
+      <ToastContainer autoClose={2000} />
     </>
   );
 }

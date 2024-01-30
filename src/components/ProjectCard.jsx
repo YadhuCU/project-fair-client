@@ -17,6 +17,7 @@ export const ProjectCard = () => {
           width={"100%"}
           height={"250px"}
           src="https://source.unsplash.com/random"
+          style={{ objectFit: "cover" }}
         />
         <Card.Body>
           <Card.Title>Card Title</Card.Title>

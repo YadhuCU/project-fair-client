@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { registerAPI } from "../services/allAPIs";
 import { useNavigate } from "react-router-dom";
+import { loginAPI } from "../services/allAPIs";
 
 Auth.propTypes = {
   insideRegister: PropTypes.bool,
@@ -36,6 +37,34 @@ function Auth({ insideRegister }) {
           setTimeout(() => {
             navigate("/login");
           }, 2000);
+        } else {
+          toast.warning(result.response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast.info("Please fill the form completely!!");
+    }
+  };
+
+  // login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const { email, password } = userData;
+
+    if (email && password) {
+      try {
+        const result = await loginAPI({ email, password });
+
+        // login the user
+        if (result.status === 200) {
+          // storing token and username in session storage
+          sessionStorage.setItem("username", result.data.existingUser.username);
+          sessionStorage.setItem("token", result.data.token);
+          setUserData({ email: "", password: "" });
+          navigate("/");
         } else {
           toast.warning(result.response.data);
         }
@@ -148,7 +177,11 @@ function Auth({ insideRegister }) {
                     </div>
                   ) : (
                     <div>
-                      <button type="submit" className="btn gradient-light">
+                      <button
+                        onClick={handleLogin}
+                        type="submit"
+                        className="btn gradient-light"
+                      >
                         Login
                       </button>
                       <p>
