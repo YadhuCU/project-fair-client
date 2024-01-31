@@ -18,7 +18,9 @@ function Dashboard() {
     <>
       <Header insideDashboard />
       <div className="conatiner w-80 mx-auto mt-5 px-5">
-        <h1 className="fw-bolder">Welcome {username && username} </h1>
+        <h1 className="fw-bolder">
+          Welcome {username && username?.split(" ")[0]}{" "}
+        </h1>
         <Row className="mt-5">
           <Col lg={8}>
             <MyProjects />

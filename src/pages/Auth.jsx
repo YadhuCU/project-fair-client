@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import Spinner from "react-bootstrap/Spinner";
 
 import { registerAPI } from "../services/allAPIs";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,7 @@ function Auth({ insideRegister }) {
     password: "",
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // register
   const handleRegister = async (e) => {
@@ -60,13 +62,17 @@ function Auth({ insideRegister }) {
 
         // login the user
         if (result.status === 200) {
+          setLoading(true);
           // storing token and username in session storage
           sessionStorage.setItem("username", result.data.existingUser.username);
           sessionStorage.setItem("token", result.data.token);
-          setUserData({ email: "", password: "" });
-          navigate("/");
+          setTimeout(() => {
+            setUserData({ email: "", password: "" });
+            navigate("/");
+          }, 2000);
         } else {
           toast.warning(result.response.data);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -183,6 +189,7 @@ function Auth({ insideRegister }) {
                         className="btn gradient-light"
                       >
                         Login
+                        {loading ? <Spinner animation="border" /> : null}
                       </button>
                       <p>
                         New User? Click here to{" "}
