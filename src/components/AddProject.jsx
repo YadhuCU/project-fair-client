@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import imageUpload from "../assets/image-upload.png";
 import { ToastContainer, toast } from "react-toastify";
+import { addProjectAPI } from "../services/allAPIs";
 
 export const AddProject = () => {
   const [show, setShow] = useState(false);
@@ -49,7 +50,7 @@ export const AddProject = () => {
     setFileStatus(false);
   };
 
-  const handleAddProject = () => {
+  const handleAddProject = async () => {
     const { title, languages, overview, github, website, projectImage } =
       projectData;
     if (
@@ -74,9 +75,26 @@ export const AddProject = () => {
       reqBody.append("projectImage", projectImage);
 
       // req header
-      const reqHeader = {
-        "Content-Type": "multipart/form-data",
-      };
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        const reqHeader = {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        };
+        console.log("reqHeader", reqHeader);
+        try {
+          const response = await addProjectAPI(reqBody, reqHeader);
+          console.log(response);
+          if (response.status === 200) {
+            console.log(response.data);
+            handleClose();
+          } else {
+            toast.warning(response.response.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
