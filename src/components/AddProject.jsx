@@ -53,6 +53,7 @@ export const AddProject = () => {
   const handleAddProject = async () => {
     const { title, languages, overview, github, website, projectImage } =
       projectData;
+
     if (
       !title ||
       !languages ||
