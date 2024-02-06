@@ -1,11 +1,18 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { Card, Modal, Row, Col } from "react-bootstrap";
+import { SERVER_URL } from "../services/serverURL";
 
-export const ProjectCard = ({ project }) => {
+ProjectCard.propTypes = {
+  project: PropTypes.object,
+};
+
+export function ProjectCard({ project }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  console.log(project);
   return (
     <>
       {project && (
@@ -17,7 +24,11 @@ export const ProjectCard = ({ project }) => {
           <Card.Img
             width={"100%"}
             height={"250px"}
-            src="https://source.unsplash.com/random"
+            src={
+              project?.projectImage
+                ? `${SERVER_URL}/uploads/${project.projectImage}`
+                : "https://source.unsplash.com/random"
+            }
             style={{ objectFit: "cover" }}
           />
           <Card.Body>
@@ -42,7 +53,11 @@ export const ProjectCard = ({ project }) => {
               <img
                 style={{ height: "250px" }}
                 className="img-fluid"
-                src="https://source.unsplash.com/random"
+                src={
+                  project?.projectImage
+                    ? `${SERVER_URL}/uploads/${project.projectImage}`
+                    : "https://source.unsplash.com/random"
+                }
               />
             </Col>
             <Col md={6}>
@@ -87,4 +102,4 @@ export const ProjectCard = ({ project }) => {
       </Modal>
     </>
   );
-};
+}

@@ -3,8 +3,11 @@ import { Modal } from "react-bootstrap";
 import imageUpload from "../assets/image-upload.png";
 import { ToastContainer, toast } from "react-toastify";
 import { addProjectAPI } from "../services/allAPIs";
+import { useContext } from "react";
+import { addProjectResponseContext } from "../context/ContextShare";
 
 export const AddProject = () => {
+  const { setAddProjectResponse } = useContext(addProjectResponseContext);
   const [show, setShow] = useState(false);
   const [projectData, setProjectData] = useState({
     title: "",
@@ -87,6 +90,7 @@ export const AddProject = () => {
           const response = await addProjectAPI(reqBody, reqHeader);
           console.log(response);
           if (response.status === 200) {
+            setAddProjectResponse(response.data);
             console.log(response.data);
             handleClose();
           } else {

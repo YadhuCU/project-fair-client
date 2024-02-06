@@ -1,8 +1,31 @@
 import { Header } from "../components/Header";
 import { Row, Col } from "react-bootstrap";
 import { ProjectCard } from "../components/ProjectCard";
+import { useEffect, useState } from "react";
+import { getAllProjectAPI } from "../services/allAPIs";
 
 function Projects() {
+  const [allProject, setAllProject] = useState([]);
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
+
+  const getAllProjects = async () => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      };
+      const result = await getAllProjectAPI(reqHeader);
+      if (result.status === 200) {
+        setAllProject(result.data);
+      } else {
+        console.log(result);
+      }
+    }
+  };
   return (
     <>
       <Header />
@@ -20,10 +43,13 @@ function Projects() {
             placeholder="Search by product"
           />
         </div>
-        <Row className="mt-t container-fluid">
-          <Col sm={12} md={6} lg={4}>
-            <ProjectCard />
-          </Col>
+        <Row className="mt-5 container-fluid">
+          {allProject.length > 0 &&
+            allProject.map((item, index) => (
+              <Col className="mb-5" key={index} sm={12} md={6} lg={4}>
+                <ProjectCard project={item} />
+              </Col>
+            ))}
         </Row>
       </div>
     </>

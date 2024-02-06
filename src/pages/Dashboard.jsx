@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 function Dashboard() {
   const [username, setUsername] = useState("");
+
   useEffect(() => {
     const user = sessionStorage.getItem("username");
     if (user) {
@@ -14,6 +15,7 @@ function Dashboard() {
       setUsername("");
     }
   }, []);
+
   return (
     <>
       <Header insideDashboard />

@@ -33,5 +33,5 @@ export const getAllProjectAPI = async (reqHeader) => {
 
 // get user project
 export const getUserProjectAPI = async (reqHeader) => {
-  return await commonAPI("GET", `${SERVER_URL}/usre-projects`, "", reqHeader);
+  return await commonAPI("GET", `${SERVER_URL}/user-projects`, "", reqHeader);
 };
