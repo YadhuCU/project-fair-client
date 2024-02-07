@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { Card, Modal, Row, Col } from "react-bootstrap";
 import { SERVER_URL } from "../services/serverURL";
 
+import PropTypes from "prop-types";
 ProjectCard.propTypes = {
   project: PropTypes.object,
 };

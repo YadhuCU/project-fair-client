@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { createContext, useState } from "react";
 
-ContextShare.propTypes = {};
+ContextShare.propTypes = {
+  children: PropTypes.element,
+};
 
 export const addProjectResponseContext = createContext();
 
