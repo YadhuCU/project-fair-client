@@ -1,20 +1,22 @@
 import { EditProject } from "./EditProject";
 import { AddProject } from "./AddProject";
 import { useState, useEffect, useContext } from "react";
-import { getUserProjectAPI } from "../services/allAPIs";
+import { deleteProjectAPI, getUserProjectAPI } from "../services/allAPIs";
 import { addProjectResponseContext } from "../context/ContextShare";
+import { editProjectResponseContext } from "../context/ContextShare";
+import { toast } from "react-toastify";
 
 export function MyProjects() {
   const [userProject, setUserProject] = useState([]);
   const { addProjectResponse } = useContext(addProjectResponseContext);
+  const { editProjectResponse } = useContext(editProjectResponseContext);
 
   useEffect(() => {
     getUserProjects();
-  }, [addProjectResponse]);
+  }, [addProjectResponse, editProjectResponse]);
 
   const getUserProjects = async () => {
     const token = sessionStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       const reqHeader = {
         "Content-Type": "multipart/form-data",
@@ -23,12 +25,33 @@ export function MyProjects() {
 
       const result = await getUserProjectAPI(reqHeader);
 
-      console.log("result", result);
-
       if (result.status === 200) {
         setUserProject(result.data);
       } else {
         console.error(result);
+      }
+    }
+  };
+
+  const handleDeleteProject = async (pid) => {
+    console.log("pid", pid);
+    const token = sessionStorage.getItem("token");
+    console.log("token", token);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      try {
+        const result = await deleteProjectAPI(pid, reqHeader);
+        console.log("result", result);
+        if (result.status === 200) {
+          getUserProjects();
+        } else {
+          toast.error(result.response.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -58,7 +81,10 @@ export function MyProjects() {
                 >
                   <i className="fa-brands fa-github" />
                 </a>
-                <button className="btn">
+                <button
+                  onClick={() => handleDeleteProject(project?._id)}
+                  className="btn"
+                >
                   <i className="fa-solid fa-trash" />
                 </button>
               </div>

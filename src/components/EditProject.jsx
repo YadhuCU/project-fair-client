@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { SERVER_URL } from "../services/serverURL";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { editProjectAPI } from "../services/allAPIs";
+import { editProjectResponseContext } from "../context/ContextShare";
 
 EditProject.propTypes = {
   project: PropTypes.object,
@@ -10,10 +12,9 @@ EditProject.propTypes = {
 
 export function EditProject({ project }) {
   const [show, setShow] = useState(false);
-
+  const { setEditProjectResponse } = useContext(editProjectResponseContext);
   const { title, languages, overview, github, website, projectImage, _id } =
     project;
-
   const [projectData, setProjectData] = useState({
     title,
     languages,
@@ -23,8 +24,23 @@ export function EditProject({ project }) {
     projectImage: "",
     _id,
   });
-
   const [preview, setPreview] = useState("");
+
+  console.log("projectData", projectData);
+  console.log("project", project);
+
+  useEffect(() => {
+    setProjectData({
+      title,
+      languages,
+      overview,
+      github,
+      website,
+      projectImage: "",
+      _id,
+    });
+  }, [project]);
+
   useEffect(() => {
     if (projectData.projectImage) {
       setPreview(URL.createObjectURL(projectData.projectImage));
@@ -34,6 +50,7 @@ export function EditProject({ project }) {
   }, [projectData.projectImage]);
 
   const handleShow = () => setShow(true);
+
   const handleClose = () => {
     setShow(false);
     setProjectData({
@@ -48,8 +65,8 @@ export function EditProject({ project }) {
     setPreview("");
   };
 
-  const handleEditProfile = () => {
-    const { title, languages, overview, github, website, projectImage } =
+  const handleEditProfile = async () => {
+    const { _id, title, languages, overview, github, website, projectImage } =
       projectData;
     if (!title || !languages || !overview || !github || !website) {
       toast.warning("please fill the form completely.");
@@ -66,20 +83,23 @@ export function EditProject({ project }) {
 
       // api call
       const token = sessionStorage.getItem("token");
-      console.log(token);
-      console.log(project);
 
       if (token) {
-        if (preview) {
-          const reqHeader = {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          };
-        } else {
-          const reqHeader = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          };
+        const reqHeader = {
+          "Content-Type": preview ? "multipart/form-data" : "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        try {
+          const result = await editProjectAPI(_id, reqBody, reqHeader);
+
+          if (result.status === 200) {
+            handleClose();
+            setEditProjectResponse(result.data);
+          } else {
+            toast.danger(result.response.data);
+          }
+        } catch (error) {
+          console.log(error);
         }
       }
     }
@@ -98,7 +118,7 @@ export function EditProject({ project }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Project Title</Modal.Title>
+          <Modal.Title>{project.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -193,7 +213,6 @@ export function EditProject({ project }) {
           </button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer autoClose={2000} />
     </>
   );
 }

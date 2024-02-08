@@ -35,3 +35,23 @@ export const getAllProjectAPI = async (reqHeader) => {
 export const getUserProjectAPI = async (reqHeader) => {
   return await commonAPI("GET", `${SERVER_URL}/user-projects`, "", reqHeader);
 };
+
+// edit project
+export const editProjectAPI = async (id, reqBody, reqHeader) => {
+  return await commonAPI(
+    "PUT",
+    `${SERVER_URL}/project/edit/${id}`,
+    reqBody,
+    reqHeader,
+  );
+};
+
+// delete project
+export const deleteProjectAPI = async (id, reqHeader) => {
+  return await commonAPI(
+    "DELETE",
+    `${SERVER_URL}/project/delete/${id}`,
+    {},
+    reqHeader,
+  );
+};

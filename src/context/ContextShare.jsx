@@ -6,16 +6,22 @@ ContextShare.propTypes = {
 };
 
 export const addProjectResponseContext = createContext();
+export const editProjectResponseContext = createContext();
 
 export function ContextShare({ children }) {
   const [addProjectResponse, setAddProjectResponse] = useState(null);
+  const [editProjectResponse, setEditProjectResponse] = useState(null);
 
   return (
     <>
       <addProjectResponseContext.Provider
         value={{ addProjectResponse, setAddProjectResponse }}
       >
-        {children}
+        <editProjectResponseContext.Provider
+          value={{ editProjectResponse, setEditProjectResponse }}
+        >
+          {children}
+        </editProjectResponseContext.Provider>
       </addProjectResponseContext.Provider>
     </>
   );
