@@ -6,10 +6,11 @@ import { getAllProjectAPI } from "../services/allAPIs";
 
 function Projects() {
   const [allProject, setAllProject] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
     getAllProjects();
-  }, []);
+  }, [searchKey]);
 
   const getAllProjects = async () => {
     const token = sessionStorage.getItem("token");
@@ -18,7 +19,7 @@ function Projects() {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       };
-      const result = await getAllProjectAPI(reqHeader);
+      const result = await getAllProjectAPI(searchKey, reqHeader);
       if (result.status === 200) {
         setAllProject(result.data);
       } else {
@@ -41,6 +42,8 @@ function Projects() {
             }}
             type="search"
             placeholder="Search by product"
+            value={searchKey}
+            onChange={(e) => setSearchKey(e.target.value)}
           />
         </div>
         <Row className="mt-5 container-fluid">

@@ -27,8 +27,13 @@ export const getHomeProjectAPI = async () => {
 };
 
 // get all project
-export const getAllProjectAPI = async (reqHeader) => {
-  return await commonAPI("GET", `${SERVER_URL}/all-projects`, "", reqHeader);
+export const getAllProjectAPI = async (searchKey, reqHeader) => {
+  return await commonAPI(
+    "GET",
+    `${SERVER_URL}/all-projects?search=${searchKey}`,
+    "",
+    reqHeader,
+  );
 };
 
 // get user project
