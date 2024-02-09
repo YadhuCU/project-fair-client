@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { tokenAuthenticationContext } from "../context/TokenAuth";
 
 export const Header = ({ insideDashboard }) => {
+  const navigate = useNavigate();
+  const { setIsAuthorised } = useContext(tokenAuthenticationContext);
+
+  const handleDelete = () => {
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("token");
+    setIsAuthorised(false);
+    navigate("/");
+  };
+
   return (
     <div
       style={{ color: "var(--bg-clr-2)" }}
@@ -22,7 +34,11 @@ export const Header = ({ insideDashboard }) => {
           <span style={{ fontSize: "2.5rem" }}> Project Fair</span>
         </Link>
         {insideDashboard && (
-          <div style={{ color: "var(--clr-bg-2)" }}>Dashboard</div>
+          <div style={{ color: "var(--clr-bg-2)" }}>
+            <button onClick={handleDelete} className="btn gradient-light">
+              Logout
+            </button>
+          </div>
         )}
       </div>
     </div>

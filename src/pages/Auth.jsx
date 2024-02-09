@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Spinner from "react-bootstrap/Spinner";
-
 import { registerAPI } from "../services/allAPIs";
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../services/allAPIs";
+import { tokenAuthenticationContext } from "../context/TokenAuth";
 
 Auth.propTypes = {
   insideRegister: PropTypes.bool,
@@ -21,6 +21,7 @@ function Auth({ insideRegister }) {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { setIsAuthorised } = useContext(tokenAuthenticationContext);
 
   // register
   const handleRegister = async (e) => {
@@ -66,6 +67,7 @@ function Auth({ insideRegister }) {
           // storing token and username in session storage
           sessionStorage.setItem("username", result.data.existingUser.username);
           sessionStorage.setItem("token", result.data.token);
+          setIsAuthorised(true);
           setTimeout(() => {
             setUserData({ email: "", password: "" });
             navigate("/");
