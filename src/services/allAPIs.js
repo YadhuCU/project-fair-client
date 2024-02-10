@@ -60,3 +60,8 @@ export const deleteProjectAPI = async (id, reqHeader) => {
     reqHeader,
   );
 };
+
+// edit user
+export const editUserAPI = async (reqBody, reqHeader) => {
+  return await commonAPI("PUT", `${SERVER_URL}/user/edit/`, reqBody, reqHeader);
+};

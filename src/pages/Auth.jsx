@@ -67,6 +67,10 @@ function Auth({ insideRegister }) {
           // storing token and username in session storage
           sessionStorage.setItem("username", result.data.existingUser.username);
           sessionStorage.setItem("token", result.data.token);
+          sessionStorage.setItem(
+            "user",
+            JSON.stringify(result.data.existingUser),
+          );
           setIsAuthorised(true);
           setTimeout(() => {
             setUserData({ email: "", password: "" });
