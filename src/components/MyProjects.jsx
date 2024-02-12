@@ -34,9 +34,7 @@ export function MyProjects() {
   };
 
   const handleDeleteProject = async (pid) => {
-    console.log("pid", pid);
     const token = sessionStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       const reqHeader = {
         "Content-Type": "application/json",
@@ -44,7 +42,6 @@ export function MyProjects() {
       };
       try {
         const result = await deleteProjectAPI(pid, reqHeader);
-        console.log("result", result);
         if (result.status === 200) {
           getUserProjects();
         } else {

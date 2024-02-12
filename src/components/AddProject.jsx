@@ -21,7 +21,6 @@ export const AddProject = () => {
   const [preview, setPreview] = useState("");
 
   useEffect(() => {
-    console.log(projectData);
     if (
       projectData.projectImage.type == "image/png" ||
       projectData.projectImage.type == "image/jpg" ||
@@ -35,8 +34,6 @@ export const AddProject = () => {
       setPreview("");
     }
   }, [projectData.projectImage]);
-
-  console.log(projectData);
 
   const handleShow = () => setShow(true);
   const handleClose = () => {
@@ -85,13 +82,10 @@ export const AddProject = () => {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         };
-        console.log("reqHeader", reqHeader);
         try {
           const response = await addProjectAPI(reqBody, reqHeader);
-          console.log(response);
           if (response.status === 200) {
             setAddProjectResponse(response.data);
-            console.log(response.data);
             handleClose();
           } else {
             toast.warning(response.response.data);

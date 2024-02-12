@@ -9,6 +9,7 @@ function Dashboard() {
 
   useEffect(() => {
     const user = sessionStorage.getItem("username");
+    console.log("session", sessionStorage.username);
     if (user) {
       setUsername(user);
     } else {

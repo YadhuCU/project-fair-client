@@ -26,9 +26,6 @@ export function EditProject({ project }) {
   });
   const [preview, setPreview] = useState("");
 
-  console.log("projectData", projectData);
-  console.log("project", project);
-
   useEffect(() => {
     setProjectData({
       title,
