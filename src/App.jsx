@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path={"/"} element={isAuthorised ? <Home /> : <Auth />} />
+        <Route path={"/"} element={<Home />} />
         <Route path={"/login"} element={<Auth />} />
         <Route path={"/register"} element={<Auth insideRegister />} />
         <Route
